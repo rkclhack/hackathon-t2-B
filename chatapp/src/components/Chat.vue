@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref, reactive, computed, onMounted } from "vue"
+import { inject, ref, reactive, onMounted } from "vue"
 import socketManager from '../socketManager.js'
 
 // #region global state

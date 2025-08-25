@@ -37,8 +37,8 @@ const onExit = () => {
 // メモを画面上に表示する
 const onMemo = () => {
   // メモの内容を表示
-  const memoText = `[メモ] ${chatContent.value}`
-  chatList.push(memoText)
+  const memoText = `${userName.value}さんのメモ: ${chatContent.value}`
+  chatList.unshift(memoText)
 
   // 入力欄を初期化
   chatContent.value = ""

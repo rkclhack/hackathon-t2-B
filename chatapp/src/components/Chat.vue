@@ -13,9 +13,6 @@ const socket = socketManager.getInstance()
 // #region reactive variable
 const chatContent = ref("")
 const chatList = reactive([])
-const chatListDesc = computed(() => {
-  return chatList.slice().reverse()
-})
 // #endregion
 
 // #region lifecycle
@@ -49,12 +46,12 @@ const onMemo = () => {
 // #region socket event handler
 // サーバから受信した入室メッセージ画面上に表示する
 const onReceiveEnter = (data) => {
-  chatList.push()
+  chatList.unshift()
 }
 
 // サーバから受信した退室メッセージを受け取り画面上に表示する
 const onReceiveExit = (data) => {
-  chatList.push()
+  chatList.unshift()
 }
 
 // サーバから受信した投稿メッセージを画面上に表示する
@@ -96,7 +93,7 @@ const registerSocketEvent = () => {
       </div>
       <div class="mt-5" v-if="chatList.length !== 0">
         <ul>
-          <li class="item mt-4" v-for="(chat, i) in chatListDesc" :key="i">{{ chat }}</li>
+          <li class="item mt-4" v-for="(chat, i) in chatList" :key="i">{{ chat }}</li>
         </ul>
       </div>
     </div>

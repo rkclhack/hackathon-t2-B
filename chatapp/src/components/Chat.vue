@@ -23,7 +23,7 @@ onMounted(() => {
 
 // #region browser event handler
 // 投稿メッセージをサーバに送信する
-const onPublish = (data) => {
+const onPublish = () => {
   socket.emit("publishEvent", chatContent.value)
   // 入力欄を初期化
   chatContent.value = ""
@@ -58,7 +58,8 @@ const onReceiveExit = (data) => {
 
 // サーバから受信した投稿メッセージを画面上に表示する
 const onReceivePublish = (data) => {
-  chatList.unshift(data)
+  const messageText = `${userName.value}さん : ${data}`
+  chatList.unshift(messageText)
 }
 // #endregion
 

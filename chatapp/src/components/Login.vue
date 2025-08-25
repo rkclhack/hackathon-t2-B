@@ -20,13 +20,16 @@ const inputUserName = ref("")
 // 入室メッセージをクライアントに送信する
 const onEnter = () => {
   // ユーザー名が入力されているかチェック
-  if (inputUserName.value === "") alert("ユーザー名を入力してください。")
+  if (inputUserName.value === "") {
+    alert("ユーザー名を入力してください。")
+    return
+  }
   // 入室メッセージを送信
   socket.emit("loginEvent", inputUserName.value + "が入室しました")
   // 全体で使用するnameに入力されたユーザー名を格納
   if (userName) userName.value = inputUserName.value
   // チャット画面へ遷移
-  if (inputUserName.value !== "") router.push({ name: "chat" } )
+  router.push({ name: "chat" })
 }
 // #endregion
 </script>

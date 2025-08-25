@@ -25,11 +25,11 @@ const onEnter = () => {
     return
   }
   // 入室メッセージを送信
-
+  socket.emit("loginEvent", inputUserName.value + "が入室しました")
   // 全体で使用するnameに入力されたユーザー名を格納
-
+  if (userName) userName.value = inputUserName.value
   // チャット画面へ遷移
-  router.push({ name: "chat" } )
+  router.push({ name: "chat" })
 }
 // #endregion
 </script>

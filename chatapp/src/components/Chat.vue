@@ -24,7 +24,8 @@ onMounted(() => {
 // #region browser event handler
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
-  socket.emit("publishEvent", chatContent.value)
+  const messageText = `${userName.value}さん：${chatContent.value}`
+  socket.emit("publishEvent", messageText)
   // 入力欄を初期化
   chatContent.value = ""
 }
@@ -37,8 +38,7 @@ const onExit = () => {
 // メモを画面上に表示する
 const onMemo = () => {
   // メモの内容を表示
-  const memoText = `${userName.value}さんのメモ: ${chatContent.value}`
-  chatList.unshift(memoText)
+  chatList.unshift(`${userName.value}さんのメモ: ${chatContent.value}`)
 
   // 入力欄を初期化
   chatContent.value = ""
@@ -48,18 +48,17 @@ const onMemo = () => {
 // #region socket event handler
 // サーバから受信した入室メッセージ画面上に表示する
 const onReceiveEnter = (data) => {
-  chatList.unshift()
+  chatList.unshift(data)
 }
 
 // サーバから受信した退室メッセージを受け取り画面上に表示する
 const onReceiveExit = (data) => {
-  chatList.unshift()
+  chatList.unshift(data)
 }
 
 // サーバから受信した投稿メッセージを画面上に表示する
 const onReceivePublish = (data) => {
-  const messageText = `${userName.value}さん : ${data}`
-  chatList.unshift(messageText)
+  chatList.unshift(data)
 }
 // #endregion
 
@@ -67,7 +66,7 @@ const onReceivePublish = (data) => {
 // イベント登録をまとめる
 const registerSocketEvent = () => {
   // 入室イベントを受け取ったら実行
-  socket.on("enterEvent", (data) => {
+  socket.on("loginEvent", (data) => {
     onReceiveEnter(data)
   })
 

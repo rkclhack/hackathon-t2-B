@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref, reactive, onMounted } from "vue"
+import { inject, ref, reactive, computed, onMounted } from "vue"
 import socketManager from '../socketManager.js'
 
 // #region global state
@@ -13,6 +13,9 @@ const socket = socketManager.getInstance()
 // #region reactive variable
 const chatContent = ref("")
 const chatList = reactive([])
+const chatListDesc = computed(() => {
+  return chatList.slice().reverse()
+})
 // #endregion
 
 // #region lifecycle
@@ -93,7 +96,7 @@ const registerSocketEvent = () => {
       </div>
       <div class="mt-5" v-if="chatList.length !== 0">
         <ul>
-          <li class="item mt-4" v-for="(chat, i) in chatList" :key="i">{{ chat }}</li>
+          <li class="item mt-4" v-for="(chat, i) in chatListDesc" :key="i">{{ chat }}</li>
         </ul>
       </div>
     </div>

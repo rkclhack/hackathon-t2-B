@@ -44,7 +44,6 @@ const formattedDate = new Date(props.chat.date).toLocaleString("ja-JP", {
       <summary>{{ formattedDate }}</summary>
       <p>ジャンル: {{ chat.genre }}</p>
       <p>重要度: {{ chat.importance }}</p>
-      <p>ID: {{ chat.id }}</p>
     </details>
   </div>
 </template>

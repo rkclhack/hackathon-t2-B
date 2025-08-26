@@ -35,16 +35,6 @@ const onExit = () => {
   socket.emit("exitEvent", userName.value + "さんが退室しました")
 }
 
-// メモを画面上に表示する
-const onMemo = () => {
-  // メモの内容を表示
-  chatList.unshift(`${userName.value}さんのメモ: ${chatContent.value}`)
-
-  // 入力欄を初期化
-  chatContent.value = ""
-}
-// #endregion
-
 // #region socket event handler
 // サーバから受信した入室メッセージ画面上に表示する
 const onReceiveEnter = (data) => {
@@ -91,7 +81,6 @@ const registerSocketEvent = () => {
       <textarea variant="outlined" placeholder="投稿文を入力してください" rows="4" class="area" v-model="chatContent"></textarea>
       <div class="mt-5">
         <button class="button-normal" @click="onPublish">投稿</button>
-        <button class="button-normal util-ml-8px" @click="onMemo">メモ</button>
       </div>
       <div class="mt-5" v-if="chatList.length !== 0">
         <ul>

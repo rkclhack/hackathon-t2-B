@@ -21,10 +21,10 @@ const initDatabase = async () => {
   `)
   await db.exec(`
     CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTO INCREMENT,
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
       employee_id TEXT NOT NULL,
       password TEXT NOT NULL,
-      display_name TEXT NOT NULL,
+      display_name TEXT NOT NULL
     )
   `)
   return db

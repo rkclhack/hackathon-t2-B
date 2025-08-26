@@ -1,9 +1,6 @@
 export default async (io, socket, db) => {
   // 入室メッセージをクライアントに送信する
   socket.on("loginEvent", async (data) => {
-    // 他のクライアントに入室を通知
-    socket.broadcast.emit("loginEvent", data)
-
     // 過去のメッセージを入室したクライアントにのみ送信
     try {
       const messages = await db.all("SELECT * FROM messages ORDER BY date ASC")
@@ -11,11 +8,6 @@ export default async (io, socket, db) => {
     } catch (e) {
       console.error("データベースからロードできませんでした", e)
     }
-  })
-
-  // 退室メッセージをクライアントに送信する
-  socket.on("exitEvent", (data) => {
-    socket.broadcast.emit("exitEvent", data)
   })
 
   // 投稿メッセージをDBに保存し、全クライアントに送信する

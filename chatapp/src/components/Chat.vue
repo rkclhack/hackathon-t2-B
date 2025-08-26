@@ -68,8 +68,7 @@ const onLoadMessages = (messages) => {
   // 既存のチャットリストをクリア
   chatList.length = 0
   messages.forEach((data) => {
-    chatList.unshift("日時: " + new Date(data.date).toLocaleString())
-    chatList.unshift(data.sender + "さん: " + data.message)
+    chatList.unshift(data)
   })
 }
 // #endregion

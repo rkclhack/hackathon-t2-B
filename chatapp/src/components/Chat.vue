@@ -13,6 +13,8 @@ const socket = socketManager.getInstance()
 // #region reactive variable
 const chatContent = ref("")
 const chatList = reactive([])
+const canPost = ref(true) // 投稿制限フラグ
+const postInterval = ref(0) // 残り時間（秒）
 // #endregion
 
 // #region lifecycle
@@ -24,10 +26,16 @@ onMounted(() => {
 // #region browser event handler
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
+  // 投稿制限中の場合は処理を中断
+  if (!canPost.value) {
+    return
+  }
   const messageText = `${userName.value}さん：${chatContent.value}`
   socket.emit("publishEvent", messageText)
   // 入力欄を初期化
   chatContent.value = ""
+
+  startCooldown()
 }
 
 // 退室メッセージをサーバに送信する
@@ -42,6 +50,7 @@ const onMemo = () => {
 
   // 入力欄を初期化
   chatContent.value = ""
+
 }
 // #endregion
 
@@ -63,6 +72,21 @@ const onReceivePublish = (data) => {
 // #endregion
 
 // #region local methods
+// 再投稿の待ち時間処理
+const startCooldown = () => {
+  canPost.value = false
+  postInterval.value = 5
+
+  const timer = setInterval(() => {
+    postInterval.value--
+    
+    if (postInterval.value <= 0) {
+      clearInterval(timer)
+      canPost.value = true
+      postInterval.value = 0
+    }
+  }, 1000)
+}
 // イベント登録をまとめる
 const registerSocketEvent = () => {
   // 入室イベントを受け取ったら実行

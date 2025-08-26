@@ -22,19 +22,6 @@ defineProps({
 </template>
 
 <style scoped>
-.highImportant {
-  background-color: #ffe5e5; /* 薄い赤色の背景 */
-}
-.middleImportant {
-  background-color: #fff5e5; /* 薄いオレンジ色の背景 */
-}
-.lowImportant {
-  background-color: #e5ffe5; /* 薄い緑色の背景 */
-}
-.done {
-  background-color: #f0f0f0; /* 薄い灰色の背景 */
-}
-
 .sender {
   font-weight: bold;
   margin-bottom: 5px;

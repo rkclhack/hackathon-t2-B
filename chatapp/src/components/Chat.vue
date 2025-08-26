@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref, reactive, onMounted } from "vue"
+import { inject, ref, reactive, onMounted, computed } from "vue"
 import socketManager from '../socketManager.js'
 import ChatCard from "./ChatCard.vue"
 
@@ -14,6 +14,7 @@ const socket = socketManager.getInstance()
 // #region reactive variable
 const chatContent = ref("")
 const chatList = reactive([])
+const importance = ref(1) // 重要度(0:完了, 1:低, 2:中, 3:高)
 // #endregion
 
 // #region lifecycle
@@ -42,13 +43,49 @@ const onPublish = () => {
     date: Date.now(),
     message: chatContent.value,
     genre: 1, // とりあえずデフォルト値を入れておきます
-    importance: 1 // 上記同様
+    importance: importance.value
   }
   socket.emit("publishEvent", data)
   // 入力欄を初期化
   chatContent.value = ""
 }
 
+// 重要度の変更
+const toggleImportance = () => {
+  importance.value = (importance.value + 1) % 4
+}
+
+// フォームのボタンに適切な重要度のクラスを付与する
+const importanceClass = computed(() => {
+  switch (importance.value) {
+    case 3:
+      return "highImportant"
+    case 2:
+      return "middleImportant"
+    case 1:
+      return "lowImportant"
+    case 0:
+      return "done"
+    default:
+      return ""
+  }
+})
+
+// フォームのボタンに適切な重要度のテキストを付与する
+const importanceText = computed(() => {
+  switch (importance.value) {
+    case 3:
+      return "重要度:高"
+    case 2:
+      return "重要度:中"
+    case 1:
+      return "重要度:低"
+    case 0:
+      return "重要度:完了"
+    default:
+      return "重要度:?"
+  }
+})
 // #endregion
 
 // #region socket event handler
@@ -90,14 +127,10 @@ const registerSocketEvent = () => {
 </script>
 
 <template>
-  <div class="mx-auto my-5 px-4">
+  <div class="mx-auto my-16 px-4">
     <h1 class="text-h3 font-weight-medium">Vue.js Chat チャットルーム</h1>
     <div class="mt-10">
       <p class="userName">ログインユーザ：{{ userName }}さん</p>
-      <textarea variant="outlined" placeholder="投稿文を入力してください" rows="4" class="area" v-model="chatContent"></textarea>
-      <div class="mt-5">
-        <button class="button-normal" @click="onPublish">投稿</button>
-      </div>
       <div class="mt-5" v-if="chatList.length !== 0">
         <ul>
           <li class="item mt-4" v-for="(chat, i) in chatList" :key="i">
@@ -109,6 +142,11 @@ const registerSocketEvent = () => {
     <router-link to="/" class="link">
       <button type="button" class="button-normal button-exit">退室する</button>
     </router-link>
+    <div class="message-form">
+      <button class="button-normal" :class="importanceClass" @click="toggleImportance">{{ importanceText }}</button>
+      <textarea variant="outlined" placeholder="投稿文を入力してください" rows="4" v-model="chatContent"></textarea>
+      <button class="button-normal" @click="onPublish">投稿</button>
+    </div>
   </div>
 </template>
 
@@ -140,5 +178,22 @@ const registerSocketEvent = () => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.message-form {
+  width: 100%;
+  height: 80px;
+  left: 0;
+  bottom: 0;
+  position: fixed;
+  background: white;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+}
+
+.message-form textarea {
+  width: 100%;
+  border: 1px solid #000;
 }
 </style>

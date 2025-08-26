@@ -137,6 +137,8 @@ const registerSocketEvent = () => {
 }
 
 .userName {
-  word-wrap: break-word; /* 長い単語を折り返す */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

@@ -38,7 +38,9 @@ defineProps({
 .sender {
   font-weight: bold;
   margin-bottom: 5px;
-  word-wrap: break-word; /* 長い単語を折り返す */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .message {
   white-space: pre-wrap; /* 改行を保持 */

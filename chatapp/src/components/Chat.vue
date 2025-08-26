@@ -25,6 +25,9 @@ onMounted(() => {
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
   const messageText = `${userName.value}さん：${chatContent.value}`
+
+  if (inputUserName.trim() === "") return
+
   socket.emit("publishEvent", messageText)
   // 入力欄を初期化
   chatContent.value = ""
@@ -33,15 +36,6 @@ const onPublish = () => {
 // 退室メッセージをサーバに送信する
 const onExit = () => {
   socket.emit("exitEvent", userName.value + "さんが退室しました")
-}
-
-// メモを画面上に表示する
-const onMemo = () => {
-  // メモの内容を表示
-  chatList.unshift(`${userName.value}さんのメモ: ${chatContent.value}`)
-
-  // 入力欄を初期化
-  chatContent.value = ""
 }
 // #endregion
 

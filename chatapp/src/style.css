@@ -11,13 +11,17 @@ body {
 
 .highImportant {
   background-color: #ffe5e5; /* 薄い赤色の背景 */
+  border: 2px solid #ee6767; /* 濃い赤色のボーダー */
 }
 .middleImportant {
   background-color: #fff5e5; /* 薄いオレンジ色の背景 */
+  border: 2px solid #f6ad37; /* 濃いオレンジ色のボーダー */
 }
 .lowImportant {
   background-color: #e5ffe5; /* 薄い緑色の背景 */
+  border: 2px solid #21b921; /* 濃い緑色のボーダー */
 }
 .done {
   background-color: #f0f0f0; /* 薄い灰色の背景 */
+  border: 2px solid #7c7c7c; /* 濃い灰色のボーダー */
 }

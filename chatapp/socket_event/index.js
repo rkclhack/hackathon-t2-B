@@ -6,7 +6,7 @@ export default async (io, socket, db) => {
     try {
       const messages = await db.all("SELECT * FROM messages ORDER BY date ASC")
       const user = await db.get(
-      "SELECT * FROM users WHERE employee_number = ? AND password = ?",
+      "SELECT * FROM users WHERE employee_id = ? AND password = ?",
       [employeeNumber, password]
     )
 

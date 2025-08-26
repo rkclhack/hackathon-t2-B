@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref } from "vue"
+import { inject, onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
 import socketManager from "../socketManager.js"
 import "./login.css"
@@ -47,11 +47,12 @@ const onEnter = () => {
   // チャット画面に遷移
   router.push({ name: "chat" })
   })
-
+}
+  onMounted(() => {
   socket.on("loginFailed", (msg) => {
     alert(msg)
   })
-}
+  })
 // #endregion
 </script>
 

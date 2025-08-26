@@ -50,7 +50,7 @@ const onPublish = () => {
     sender: userName.value,
     date: Date.now(),
     message: chatContent.value,
-    genre: 1, // とりあえずデフォルト値を入れておきます
+    genre: 0, // とりあえずデフォルト値を入れておきます
     importance: 1 // 上記同様
   }
   socket.emit("publishEvent", data)

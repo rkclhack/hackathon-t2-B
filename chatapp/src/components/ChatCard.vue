@@ -42,8 +42,25 @@ const formattedDate = new Date(props.chat.date).toLocaleString("ja-JP", {
     <p class="message">{{ chat.message }}</p>
     <details>
       <summary>{{ formattedDate }}</summary>
-      <p>ジャンル: {{ chat.genre }}</p>
-      <p>重要度: {{ chat.importance }}</p>
+      <div>
+        <label for="genre-select">表示ジャンル：</label>
+        <select v-model="chat.genre" class="select-box">
+          <option :value="0">全体</option>
+          <option :value="1">あいさつ</option>
+          <option :value="2">シフト</option>
+          <option :value="3">業務連絡</option>
+          <option :value="4">雑談</option>
+        </select>
+      </div>
+      <div>
+        <label>重要度：</label>
+        <select v-model="chat.importance" class="select-box">
+          <option :value="0">完了</option>
+          <option :value="1">低</option>
+          <option :value="2">中</option>
+          <option :value="3">高</option>
+        </select>
+      </div>
     </details>
   </div>
 </template>
@@ -68,5 +85,12 @@ const formattedDate = new Date(props.chat.date).toLocaleString("ja-JP", {
 .message-wrap summary {
   color: #6d6d6d;
   font-size: 12px;
+}
+.select-box {
+  padding: 8px;
+  margin-left: 8px;
+  border: 1px solid #888;
+  border-radius: 4px;
+  background-color: white;
 }
 </style>

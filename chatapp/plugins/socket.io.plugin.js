@@ -19,6 +19,14 @@ const initDatabase = async () => {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `)
+  await db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTO INCREMENT,
+      employee_id TEXT NOT NULL,
+      password TEXT NOT NULL,
+      display_name TEXT NOT NULL,
+    )
+  `)
   return db
 }
 

@@ -34,7 +34,6 @@ defineProps({
 .done {
   background-color: #f0f0f0; /* 薄い灰色の背景 */
 }
-
 .sender {
   font-weight: bold;
   margin-bottom: 5px;

@@ -8,7 +8,6 @@ const userName = inject("userName")
 
 // #region local variable
 const socket = socketManager.getInstance()
-const maxId = 1000000000000000
 // #endregion
 
 // #region reactive variable
@@ -22,34 +21,46 @@ onMounted(() => {
 })
 // #endregion
 
+/**
+ * @typedef {Object} chatData チャット送受信のオブジェクト
+ * @property {string} id UUID
+ * @property {string} sender 送信者
+ * @property {number} date 送信した日時(ミリ秒として)
+ * @property {string} message 送信メッセージ
+ * @property {number} genre ジャンル
+ * @property {number} importance 重要度
+ */
+
 // #region browser event handler
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
-  socket.emit("publishEvent", {
-    id: Math.floor(Math.random * maxId),
+  /** @type {chatData} */
+  const data = {
+    id: self.crypto.randomUUID(),
     sender: userName.value,
     date: Date.now(),
     message: chatContent.value,
     genre: 1, // とりあえずデフォルト値を入れておきます
     importance: 1 // 上記同様
-  })
+  }
+  socket.emit("publishEvent", data)
   // 入力欄を初期化
   chatContent.value = ""
 }
 
-// メモを画面上に表示する
-const onMemo = () => {
-  // メモの内容を表示
-  chatList.unshift(`${userName.value}さんのメモ: ${chatContent.value}`)
-
-  // 入力欄を初期化
-  chatContent.value = ""
+// 退室メッセージをサーバに送信する
+const onExit = () => {
+  socket.emit("exitEvent", userName.value + "さんが退室しました")
 }
+
 // #endregion
 
 // #region socket event handler
 
 // サーバから受信した投稿メッセージを画面上に表示する
+/**
+ * @param {chatData} data 受け取ったチャット
+ */
 const onReceivePublish = (data) => {
   chatList.unshift("日時: " + new Date(data.date).toLocaleString())
   chatList.unshift(data.sender + "さん: " + data.message)
@@ -75,7 +86,6 @@ const registerSocketEvent = () => {
       <textarea variant="outlined" placeholder="投稿文を入力してください" rows="4" class="area" v-model="chatContent"></textarea>
       <div class="mt-5">
         <button class="button-normal" @click="onPublish">投稿</button>
-        <button class="button-normal util-ml-8px" @click="onMemo">メモ</button>
       </div>
       <div class="mt-5" v-if="chatList.length !== 0">
         <ul>

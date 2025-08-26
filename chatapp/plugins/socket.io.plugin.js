@@ -21,7 +21,8 @@ const initDatabase = async () => {
   `)
   await db.exec(`
     CREATE TABLE IF NOT EXISTS users (
-      id TEXT NOT NULL,
+      id INTEGER PRIMARY KEY AUTO INCREMENT,
+      employee_id TEXT NOT NULL,
       password TEXT NOT NULL,
       display_name TEXT NOT NULL,
     )

@@ -26,7 +26,7 @@ onMounted(() => {
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
   socket.emit("publishEvent", {
-    id: Math.floor(Math.random * maxId),
+    id: Math.floor(Math.random() * maxId),
     sender: userName.value,
     date: Date.now(),
     message: chatContent.value,

@@ -56,15 +56,6 @@ const onExit = () => {
 // #endregion
 
 // #region socket event handler
-// サーバから受信した入室メッセージ画面上に表示する
-const onReceiveEnter = (data) => {
-  chatList.unshift(data)
-}
-
-// サーバから受信した退室メッセージを受け取り画面上に表示する
-const onReceiveExit = (data) => {
-  chatList.unshift(data)
-}
 
 // サーバから受信した投稿メッセージを画面上に表示する
 /**
@@ -79,16 +70,6 @@ const onReceivePublish = (data) => {
 // #region local methods
 // イベント登録をまとめる
 const registerSocketEvent = () => {
-  // 入室イベントを受け取ったら実行
-  socket.on("loginEvent", (data) => {
-    onReceiveEnter(data)
-  })
-
-  // 退室イベントを受け取ったら実行
-  socket.on("exitEvent", (data) => {
-    onReceiveExit(data)
-  })
-
   // 投稿イベントを受け取ったら実行
   socket.on("publishEvent", (data) => {
     onReceivePublish(data)
@@ -113,7 +94,7 @@ const registerSocketEvent = () => {
       </div>
     </div>
     <router-link to="/" class="link">
-      <button type="button" class="button-normal button-exit" @click="onExit">退室する</button>
+      <button type="button" class="button-normal button-exit">退室する</button>
     </router-link>
   </div>
 </template>

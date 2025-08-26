@@ -48,11 +48,6 @@ const onPublish = () => {
   chatContent.value = ""
 }
 
-// 退室メッセージをサーバに送信する
-const onExit = () => {
-  socket.emit("exitEvent", userName.value + "さんが退室しました")
-}
-
 // #endregion
 
 // #region socket event handler

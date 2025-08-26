@@ -1,6 +1,6 @@
 export default async (io, socket, db) => {
   // 入室メッセージをクライアントに送信する
-  socket.on("loginEvent", async (data) => {
+  socket.on("loginEvent", async () => {
     // 過去のメッセージを入室したクライアントにのみ送信
     try {
       const messages = await db.all("SELECT * FROM messages ORDER BY date ASC")

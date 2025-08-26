@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref, reactive, onMounted } from "vue"
+import { inject, ref, reactive, onMounted, computed } from "vue"
 import socketManager from '../socketManager.js'
 import ChatCard from "./ChatCard.vue"
 
@@ -14,9 +14,18 @@ const socket = socketManager.getInstance()
 // #region reactive variable
 const chatContent = ref("")
 const chatList = reactive([])
+const selectedGenre = ref(0) // 選択したジャンルを変数にて保存 0:全て表示
 // #endregion
 
 // #region lifecycle
+//選択されたジャンルに基づいてメッセージをフィルタリング
+const filterChatList = computed(() => {
+  if (selectedGenre.value === 0) {
+    return chatList
+  }
+  return chatList.filter(chat => chat.genre === selectedGenre.value)
+})
+
 onMounted(() => {
   registerSocketEvent()
 })
@@ -94,13 +103,25 @@ const registerSocketEvent = () => {
     <h1 class="text-h3 font-weight-medium">Vue.js Chat チャットルーム</h1>
     <div class="mt-10">
       <p>ログインユーザ：{{ userName }}さん</p>
+
+      <div class="mt-5">
+        <label for="genre-select">表示ジャンル：</label>
+        <select id="genre-select" v-model="selectedGenre" class="genre-select">
+          <option :value="0">全体</option>
+          <option :value="1">あいさつ</option>
+          <option :value="2">シフト</option>
+          <option :value="3">業務連絡</option>
+          <option :value="4">雑談</option>
+        </select>
+      </div>
+
       <textarea variant="outlined" placeholder="投稿文を入力してください" rows="4" class="area" v-model="chatContent"></textarea>
       <div class="mt-5">
         <button class="button-normal" @click="onPublish">投稿</button>
       </div>
-      <div class="mt-5" v-if="chatList.length !== 0">
+      <div class="mt-5" v-if="filterChatList.length !== 0">
         <ul>
-          <li class="item mt-4" v-for="(chat, i) in chatList" :key="i">
+          <li class="item mt-4" v-for="(chat, i) in filterChatList" :key="i">
             <ChatCard :chat="chat" />
           </li>
         </ul>
@@ -134,5 +155,13 @@ const registerSocketEvent = () => {
 .button-exit {
   color: #000;
   margin-top: 8px;
+}
+
+.genre-select {
+  padding: 8px;
+  margin-left: 8px;
+  border: 1px solid #888;
+  border-radius: 4px;
+  background-color: white;
 }
 </style>

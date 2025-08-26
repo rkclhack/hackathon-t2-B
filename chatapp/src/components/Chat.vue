@@ -21,11 +21,29 @@ onMounted(() => {
 })
 // #endregion
 
+/**
+ * @typedef {Object} chatData チャット送受信のオブジェクト
+ * @property {string} id UUID
+ * @property {string} sender 送信者
+ * @property {number} date 送信した日時(ミリ秒として)
+ * @property {string} message 送信メッセージ
+ * @property {number} genre ジャンル
+ * @property {number} importance 重要度
+ */
+
 // #region browser event handler
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
-  const messageText = `${userName.value}さん：${chatContent.value}`
-  socket.emit("publishEvent", messageText)
+  /** @type {chatData} */
+  const data = {
+    id: self.crypto.randomUUID(),
+    sender: userName.value,
+    date: Date.now(),
+    message: chatContent.value,
+    genre: 1, // とりあえずデフォルト値を入れておきます
+    importance: 1 // 上記同様
+  }
+  socket.emit("publishEvent", data)
   // 入力欄を初期化
   chatContent.value = ""
 }
@@ -49,8 +67,12 @@ const onReceiveExit = (data) => {
 }
 
 // サーバから受信した投稿メッセージを画面上に表示する
+/**
+ * @param {chatData} data 受け取ったチャット
+ */
 const onReceivePublish = (data) => {
-  chatList.unshift(data)
+  chatList.unshift("日時: " + new Date(data.date).toLocaleString())
+  chatList.unshift(data.sender + "さん: " + data.message)
 }
 // #endregion
 

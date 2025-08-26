@@ -1,6 +1,7 @@
 <script setup>
 import { inject, ref, reactive, onMounted } from "vue"
 import socketManager from '../socketManager.js'
+import ChatCard from "./ChatCard.vue"
 
 // #region global state
 const userName = inject("userName")
@@ -56,8 +57,7 @@ const onPublish = () => {
  * @param {chatData} data 受け取ったチャット
  */
 const onReceivePublish = (data) => {
-  chatList.unshift("日時: " + new Date(data.date).toLocaleString())
-  chatList.unshift(data.sender + "さん: " + data.message)
+  chatList.unshift(data)
 }
 
 // サーバーから受信した過去のメッセージを画面上に表示する
@@ -68,8 +68,7 @@ const onLoadMessages = (messages) => {
   // 既存のチャットリストをクリア
   chatList.length = 0
   messages.forEach((data) => {
-    chatList.unshift("日時: " + new Date(data.date).toLocaleString())
-    chatList.unshift(data.sender + "さん: " + data.message)
+    chatList.unshift(data)
   })
 }
 // #endregion
@@ -101,7 +100,9 @@ const registerSocketEvent = () => {
       </div>
       <div class="mt-5" v-if="chatList.length !== 0">
         <ul>
-          <li class="item mt-4" v-for="(chat, i) in chatList" :key="i">{{ chat }}</li>
+          <li class="item mt-4" v-for="(chat, i) in chatList" :key="i">
+            <ChatCard :chat="chat" />
+          </li>
         </ul>
       </div>
     </div>

@@ -35,6 +35,8 @@ const onExit = () => {
   socket.emit("exitEvent", userName.value + "さんが退室しました")
 }
 
+// #endregion
+
 // #region socket event handler
 // サーバから受信した入室メッセージ画面上に表示する
 const onReceiveEnter = (data) => {

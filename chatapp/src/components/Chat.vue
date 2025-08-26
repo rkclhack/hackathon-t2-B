@@ -53,6 +53,9 @@ const onExit = () => {
   socket.emit("exitEvent", userName.value + "さんが退室しました")
 }
 
+/**
+ * @param {KeyboardEvent} e Keydownされたキー
+ */
 const onKeyDown = (e) => {
   if((e.key === "Enter" || e.code === "Enter") && chatContent.value.replace(/\s/g, "").length > 0){
     e.preventDefault()

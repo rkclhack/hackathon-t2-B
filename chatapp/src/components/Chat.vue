@@ -74,11 +74,26 @@ const onReceivePublish = (data) => {
   chatList.unshift("日時: " + new Date(data.date).toLocaleString())
   chatList.unshift(data.sender + "さん: " + data.message)
 }
+
+// サーバーから受信した過去のメッセージを画面上に表示する
+const onLoadMessages = (messages) => {
+  // 既存のチャットリストをクリア
+  chatList.length = 0
+  messages.forEach((data) => {
+    chatList.unshift("日時: " + new Date(data.date).toLocaleString())
+    chatList.unshift(data.sender + "さん: " + data.message)
+  })
+}
 // #endregion
 
 // #region local methods
 // イベント登録をまとめる
 const registerSocketEvent = () => {
+  // 過去のメッセージ履歴を受け取ったら実行
+  socket.on("loadMessages", (messages) => {
+    onLoadMessages(messages)
+  })
+
   // 入室イベントを受け取ったら実行
   socket.on("loginEvent", (data) => {
     onReceiveEnter(data)

@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .env
+
+# SQLite db
+chatapp.db

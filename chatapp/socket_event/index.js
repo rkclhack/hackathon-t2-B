@@ -1,4 +1,35 @@
 export default async (io, socket, db) => {
+  //初回登録用の通信を行う
+  socket.on("registerEvent", async (data) => {
+  const { userName, employeeNumber, password } = data
+    console.log(data)
+  try {
+    // すでに同じ社員番号が存在するか確認
+    const existingUser = await db.get(
+      "SELECT * FROM users WHERE employee_id = ?",
+      [employeeNumber]
+    )
+
+    if (existingUser) {
+      socket.emit("registerFailed", "この社員番号はすでに登録されています")
+      return
+    }
+
+    // ユーザーを登録
+    await db.run(
+      "INSERT INTO users (display_name, employee_id, password) VALUES (?, ?, ?)",
+      [userName, employeeNumber, password]
+    )
+
+    // 登録成功メッセージを返す
+    socket.emit("registerSuccess", "登録が完了しました。ログインしてください")
+
+  } catch (e) {
+    console.error("ユーザー登録に失敗しました", e)
+    socket.emit("registerFailed", "登録処理中にエラーが発生しました")
+  }
+})
+
   // 入室メッセージをクライアントに送信する
   socket.on("loginEvent", async (data) => {
     // 過去のメッセージを入室したクライアントにのみ送信

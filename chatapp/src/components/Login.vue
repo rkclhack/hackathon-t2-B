@@ -39,19 +39,19 @@ const onEnter = () => {
     employeeNumber: inputEmployeeNumber.value,
     password: inputPassword.value
   })
-
-  socket.on("loginSuccess", (data) => {
-  // 受け取ったユーザー名をグローバル状態にセット
-  if (userName) userName.value = data.userName
-
-  // チャット画面に遷移
-  router.push({ name: "chat" })
-  })
 }
   onMounted(() => {
-  socket.on("loginFailed", (msg) => {
-    alert(msg)
+    socket.on("loginSuccess", (data) => {
+    // 受け取ったユーザー名をグローバル状態にセット
+    if (userName) userName.value = data.userName
+
+    // チャット画面に遷移
+    router.push({ name: "chat" })
   })
+
+    socket.on("loginFailed", (msg) => {
+      alert(msg)
+    })
   })
 // #endregion
 </script>
@@ -70,6 +70,11 @@ const onEnter = () => {
       <button type="button" class="login-button" @click="onEnter">
         入室する
       </button>
+
+      <p style="margin-top: 12px;">
+        <router-link :to="{ name: 'register' }">新規登録</router-link>
+      </p>
+
     </div>
   </div>
 </template>

@@ -1,6 +1,7 @@
 <script setup>
 import { inject, ref, reactive, onMounted, computed } from "vue"
 import socketManager from '../socketManager.js'
+import ChatCard from "./ChatCard.vue"
 
 // #region global state
 const userName = inject("userName")

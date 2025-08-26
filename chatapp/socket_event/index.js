@@ -2,7 +2,6 @@ export default async (io, socket, db) => {
   //初回登録用の通信を行う
   socket.on("registerEvent", async (data) => {
   const { userName, employeeNumber, password } = data
-    console.log(data)
   try {
     // すでに同じ社員番号が存在するか確認
     const existingUser = await db.get(

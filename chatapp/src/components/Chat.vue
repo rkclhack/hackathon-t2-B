@@ -48,15 +48,9 @@ const onPublish = () => {
   chatContent.value = ""
 }
 
-// 退室メッセージをサーバに送信する
-const onExit = () => {
-  socket.emit("exitEvent", userName.value + "さんが退室しました")
-}
-
 // #endregion
 
 // #region socket event handler
-
 // サーバから受信した投稿メッセージを画面上に表示する
 /**
  * @param {chatData} data 受け取ったチャット
@@ -65,11 +59,29 @@ const onReceivePublish = (data) => {
   chatList.unshift("日時: " + new Date(data.date).toLocaleString())
   chatList.unshift(data.sender + "さん: " + data.message)
 }
+
+// サーバーから受信した過去のメッセージを画面上に表示する
+/**
+ * @param {Array.<chatData>} messages 受け取ったチャットたち
+ */
+const onLoadMessages = (messages) => {
+  // 既存のチャットリストをクリア
+  chatList.length = 0
+  messages.forEach((data) => {
+    chatList.unshift("日時: " + new Date(data.date).toLocaleString())
+    chatList.unshift(data.sender + "さん: " + data.message)
+  })
+}
 // #endregion
 
 // #region local methods
 // イベント登録をまとめる
 const registerSocketEvent = () => {
+    // 過去のメッセージ履歴を受け取ったら実行
+  socket.on("loadMessages", (messages) => {
+    onLoadMessages(messages)
+  })
+
   // 投稿イベントを受け取ったら実行
   socket.on("publishEvent", (data) => {
     onReceivePublish(data)

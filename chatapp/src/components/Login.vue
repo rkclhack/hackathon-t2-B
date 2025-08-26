@@ -1,6 +1,7 @@
 <script setup>
 import { inject, ref } from "vue"
 import { useRouter } from "vue-router"
+import socketManager from "../socketManager.js"
 
 // #region global state
 const userName = inject("userName")
@@ -8,6 +9,7 @@ const userName = inject("userName")
 
 // #region local variable
 const router = useRouter()
+const socket = socketManager.getInstance()
 // #endregion
 
 // #region reactive variable
@@ -22,6 +24,8 @@ const onEnter = () => {
     alert("ユーザー名を入力してください。")
     return
   }
+  // 入室情報を送信(既存のチャットを要求)
+  socket.emit("loginEvent")
   // 全体で使用するnameに入力されたユーザー名を格納
   if (userName) userName.value = inputUserName.value
   // チャット画面へ遷移

@@ -1,6 +1,7 @@
 <script setup>
 import { inject, ref, reactive, onMounted } from "vue"
 import socketManager from '../socketManager.js'
+import ChatCard from "./ChatCard.vue"
 
 // #region global state
 const userName = inject("userName")
@@ -101,7 +102,9 @@ const registerSocketEvent = () => {
       </div>
       <div class="mt-5" v-if="chatList.length !== 0">
         <ul>
-          <li class="item mt-4" v-for="(chat, i) in chatList" :key="i">{{ chat }}</li>
+          <li class="item mt-4" v-for="(chat, i) in chatList" :key="i">
+            <ChatCard :chat="chat" />
+          </li>
         </ul>
       </div>
     </div>

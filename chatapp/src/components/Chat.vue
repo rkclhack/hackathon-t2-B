@@ -140,6 +140,9 @@ const registerSocketEvent = () => {
     <h1 class="text-h3 font-weight-medium">Vue.js Chat チャットルーム</h1>
     <div class="mt-10">
       <p class="userName">ログインユーザ：{{ userName }}さん</p>
+      <router-link to="/" class="link">
+        <button type="button" class="button-normal button-exit">退室する</button>
+      </router-link>
 
       <div class="mt-5">
         <label for="genre-select">表示ジャンル：</label>
@@ -159,9 +162,6 @@ const registerSocketEvent = () => {
         </ul>
       </div>
     </div>
-    <router-link to="/" class="link">
-      <button type="button" class="button-normal button-exit">退室する</button>
-    </router-link>
     <div class="message-form">
       <button class="button-normal" :class="importanceClass" @click="toggleImportance">{{ importanceText }}</button>
       <textarea variant="outlined" placeholder="投稿文を入力してください" rows="4" v-model="chatContent"></textarea>

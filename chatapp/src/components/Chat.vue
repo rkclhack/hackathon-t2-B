@@ -53,16 +53,6 @@ const onExit = () => {
   socket.emit("exitEvent", userName.value + "さんが退室しました")
 }
 
-/**
- * @param {KeyboardEvent} e Keydownされたキー
- */
-const onKeyDown = (e) => {
-  if((e.key === "Enter" || e.code === "Enter") && chatContent.value.replace(/\s/g, "").length > 0){
-    e.preventDefault()
-    onPublish()
-  }
-}
-
 // #endregion
 
 // #region socket event handler
@@ -93,7 +83,7 @@ const registerSocketEvent = () => {
     <h1 class="text-h3 font-weight-medium">Vue.js Chat チャットルーム</h1>
     <div class="mt-10">
       <p>ログインユーザ：{{ userName }}さん</p>
-      <textarea variant="outlined" placeholder="投稿文を入力してください" rows="4" class="area" v-model="chatContent" @keydown="onKeyDown"></textarea>
+      <textarea variant="outlined" placeholder="投稿文を入力してください" rows="4" class="area" v-model="chatContent" @keyup.enter="onPublish"></textarea>
       <div class="mt-5">
         <button class="button-normal" @click="onPublish">投稿</button>
       </div>

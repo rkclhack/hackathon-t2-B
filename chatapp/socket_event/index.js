@@ -28,4 +28,19 @@ export default async (io, socket, db) => {
       console.error("データベースに保存できませんでした", e)
     }
   })
+
+  // メッセージのジャンルの変更イベント
+  socket.on("updateMessageEvent", async (data) => {
+    try {
+      await db.run(
+        `UPDATE messages SET genre = ?, importance = ? WHERE id = ?`,
+        data.genre,
+        data.importance,
+        data.id
+      )
+      io.sockets.emit("updateMessageEvent", data)
+    } catch (e) {
+      console.error("データベースの更新に失敗しました", e)
+    }
+  })
 }

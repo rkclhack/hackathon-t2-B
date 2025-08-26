@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref, reactive, onMounted, computed } from "vue"
+import { inject, ref, reactive, onMounted, computed, onUpdated } from "vue"
 import socketManager from '../socketManager.js'
 import ChatCard from "./ChatCard.vue"
 
@@ -117,6 +117,15 @@ const onLoadMessages = (messages) => {
     chatList.unshift(data)
   })
 }
+
+// メッセージ更新イベントの受信
+const onMessageUpdated = (updateData) => {
+  const messageIndex = chatList.findIndex(chat => chat.id === updateData.id)
+  if (messageIndex !== -1) {
+    chatList[messageIndex].gener = updateData.genre
+    chatList[messageIndex].importance = updateData.importance
+  }
+}
 // #endregion
 
 // #region local methods
@@ -130,6 +139,11 @@ const registerSocketEvent = () => {
   // 投稿イベントを受け取ったら実行
   socket.on("publishEvent", (data) => {
     onReceivePublish(data)
+  })
+
+  // メッセージ更新イベントを受け取ったら実行
+  socket.on("messageUpdatedEvent", (data) => {
+    onMessageUpdated(data)
   })
 }
 // #endregion

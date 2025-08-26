@@ -1,5 +1,9 @@
 <script setup>
-import { computed } from "vue"
+import socketManager from "../socketManager.js" 
+import { computed, ref } from "vue" 
+
+const socket = socketManager.getInstance() 
+
 const props = defineProps({
   chat: {
     id: String,
@@ -11,9 +15,29 @@ const props = defineProps({
   }
 })
 
+// ローカル状態として管理
+const localGenre = ref(props.chat.genre)
+const localImportance = ref(props.chat.importance)
+
+let updateTimeout = null
+
+// デバウンス付きの更新関数
+const updateMessage = () => {
+  if (updateTimeout) clearTimeout(updateTimeout)
+  
+  updateTimeout = setTimeout(() => {
+    const updateData = {
+      id: props.chat.id,
+      genre: localGenre.value,
+      importance: localImportance.value
+    }
+    socket.emit("updateMessageEvent", updateData)  
+  }, 500)
+}
+
 // フォームのボタンに適切な重要度のクラスを付与する
 const importanceClass = computed(() => {
-  switch (props.chat.importance) {
+  switch (localImportance.value) { 
     case 3:
       return "highImportant"
     case 2:
@@ -43,8 +67,8 @@ const formattedDate = new Date(props.chat.date).toLocaleString("ja-JP", {
     <details>
       <summary>{{ formattedDate }}</summary>
       <div>
-        <label for="genre-select">表示ジャンル：</label>
-        <select v-model="chat.genre" class="select-box">
+        <label>表示ジャンル：</label>
+        <select v-model="localGenre" @change="updateMessage" class="select-box">
           <option :value="0">全体</option>
           <option :value="1">あいさつ</option>
           <option :value="2">シフト</option>
@@ -54,7 +78,7 @@ const formattedDate = new Date(props.chat.date).toLocaleString("ja-JP", {
       </div>
       <div>
         <label>重要度：</label>
-        <select v-model="chat.importance" class="select-box">
+        <select v-model="localImportance" @change="updateMessage" class="select-box">
           <option :value="0">完了</option>
           <option :value="1">低</option>
           <option :value="2">中</option>

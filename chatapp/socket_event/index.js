@@ -38,7 +38,7 @@ export default async (io, socket, db) => {
         data.importance,
         data.id
       )
-      io.sockets.emit("updateMessageEvent", data)
+      io.sockets.emit("messageUpdatedEvent", data)
     } catch (e) {
       console.error("データベースの更新に失敗しました", e)
     }

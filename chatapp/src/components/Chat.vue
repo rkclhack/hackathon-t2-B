@@ -122,7 +122,7 @@ const onLoadMessages = (messages) => {
 const onMessageUpdated = (updateData) => {
   const messageIndex = chatList.findIndex(chat => chat.id === updateData.id)
   if (messageIndex !== -1) {
-    chatList[messageIndex].gener = updateData.genre
+    chatList[messageIndex].genre = updateData.genre
     chatList[messageIndex].importance = updateData.importance
   }
 }

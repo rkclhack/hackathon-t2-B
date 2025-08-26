@@ -57,8 +57,7 @@ const onPublish = () => {
  * @param {chatData} data 受け取ったチャット
  */
 const onReceivePublish = (data) => {
-  chatList.unshift("日時: " + new Date(data.date).toLocaleString())
-  chatList.unshift(data.sender + "さん: " + data.message)
+  chatList.unshift(data)
 }
 
 // サーバーから受信した過去のメッセージを画面上に表示する

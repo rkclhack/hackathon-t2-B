@@ -14,10 +14,19 @@ const socket = socketManager.getInstance()
 // #region reactive variable
 const chatContent = ref("")
 const chatList = reactive([])
+const selectedGenre = ref(0) // 選択したジャンルを変数にて保存 0:全て表示
 const importance = ref(1) // 重要度(0:完了, 1:低, 2:中, 3:高)
 // #endregion
 
 // #region lifecycle
+//選択されたジャンルに基づいてメッセージをフィルタリング
+const filterChatList = computed(() => {
+  if (selectedGenre.value === 0) {
+    return chatList
+  }
+  return chatList.filter(chat => chat.genre === selectedGenre.value)
+})
+
 onMounted(() => {
   registerSocketEvent()
 })
@@ -42,8 +51,8 @@ const onPublish = () => {
     sender: userName.value,
     date: Date.now(),
     message: chatContent.value,
-    genre: 1, // とりあえずデフォルト値を入れておきます
-    importance: importance.value
+    genre: selectedGenre.value,
+    importance: importance.value,
   }
   socket.emit("publishEvent", data)
   // 入力欄を初期化
@@ -131,9 +140,20 @@ const registerSocketEvent = () => {
     <h1 class="text-h3 font-weight-medium">Vue.js Chat チャットルーム</h1>
     <div class="mt-10">
       <p class="userName">ログインユーザ：{{ userName }}さん</p>
-      <div class="mt-5" v-if="chatList.length !== 0">
+
+      <div class="mt-5">
+        <label for="genre-select">表示ジャンル：</label>
+        <select id="genre-select" v-model="selectedGenre" class="genre-select">
+          <option :value="0">全体</option>
+          <option :value="1">あいさつ</option>
+          <option :value="2">シフト</option>
+          <option :value="3">業務連絡</option>
+          <option :value="4">雑談</option>
+        </select>
+      </div>
+      <div class="mt-5" v-if="filterChatList.length !== 0">
         <ul>
-          <li class="item mt-4" v-for="(chat, i) in chatList" :key="i">
+          <li class="item mt-4" v-for="(chat, i) in filterChatList" :key="i">
             <ChatCard :chat="chat" />
           </li>
         </ul>
@@ -172,6 +192,14 @@ const registerSocketEvent = () => {
 .button-exit {
   color: #000;
   margin-top: 8px;
+}
+
+.genre-select {
+  padding: 8px;
+  margin-left: 8px;
+  border: 1px solid #888;
+  border-radius: 4px;
+  background-color: white;
 }
 
 .userName {

@@ -8,6 +8,7 @@ const userName = inject("userName")
 
 // #region local variable
 const socket = socketManager.getInstance()
+const maxId = 1000000000000000
 // #endregion
 
 // #region reactive variable
@@ -24,8 +25,14 @@ onMounted(() => {
 // #region browser event handler
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
-  const messageText = `${userName.value}さん：${chatContent.value}`
-  socket.emit("publishEvent", messageText)
+  socket.emit("publishEvent", {
+    id: Math.floor(Math.random * maxId),
+    sender: userName.value,
+    date: Date.now(),
+    message: chatContent.value,
+    genre: 1, // とりあえずデフォルト値を入れておきます
+    importance: 1 // 上記同様
+  })
   // 入力欄を初期化
   chatContent.value = ""
 }
@@ -58,7 +65,8 @@ const onReceiveExit = (data) => {
 
 // サーバから受信した投稿メッセージを画面上に表示する
 const onReceivePublish = (data) => {
-  chatList.unshift(data)
+  chatList.unshift("日時: " + new Date(data.date).toLocaleString())
+  chatList.unshift(data.sender + "さん: " + data.message)
 }
 // #endregion
 

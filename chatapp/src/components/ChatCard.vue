@@ -16,7 +16,7 @@ defineProps({
   <div :class="{highImportant : chat.importance === 3, middleImportant : chat.importance === 2, lowImportant : chat.importance === 1, done : chat.importance === 0}">
     名前：{{ chat.sender }}<br>
     {{chat.message}}<br>
-    時刻：{{ chat.date }}
+    時刻：{{ new Date(chat.date).toLocaleString() }}
   </div>
   </div>
 </template>

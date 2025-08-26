@@ -37,11 +37,6 @@ const onPublish = () => {
   chatContent.value = ""
 }
 
-// 退室メッセージをサーバに送信する
-const onExit = () => {
-  socket.emit("exitEvent", userName.value + "さんが退室しました")
-}
-
 // メモを画面上に表示する
 const onMemo = () => {
   // メモの内容を表示
@@ -53,15 +48,6 @@ const onMemo = () => {
 // #endregion
 
 // #region socket event handler
-// サーバから受信した入室メッセージ画面上に表示する
-const onReceiveEnter = (data) => {
-  chatList.unshift(data)
-}
-
-// サーバから受信した退室メッセージを受け取り画面上に表示する
-const onReceiveExit = (data) => {
-  chatList.unshift(data)
-}
 
 // サーバから受信した投稿メッセージを画面上に表示する
 const onReceivePublish = (data) => {
@@ -73,16 +59,6 @@ const onReceivePublish = (data) => {
 // #region local methods
 // イベント登録をまとめる
 const registerSocketEvent = () => {
-  // 入室イベントを受け取ったら実行
-  socket.on("loginEvent", (data) => {
-    onReceiveEnter(data)
-  })
-
-  // 退室イベントを受け取ったら実行
-  socket.on("exitEvent", (data) => {
-    onReceiveExit(data)
-  })
-
   // 投稿イベントを受け取ったら実行
   socket.on("publishEvent", (data) => {
     onReceivePublish(data)
@@ -108,7 +84,7 @@ const registerSocketEvent = () => {
       </div>
     </div>
     <router-link to="/" class="link">
-      <button type="button" class="button-normal button-exit" @click="onExit">退室する</button>
+      <button type="button" class="button-normal button-exit">退室する</button>
     </router-link>
   </div>
 </template>

@@ -11,7 +11,6 @@ const employeeNumber = inject("employeeNumber")
 
 // #region local variable
 const router = useRouter()
-const socket = socketManager.getInstance()
 // #endregion
 
 // #region reactive variable
@@ -32,9 +31,9 @@ const onEnter = () => {
     alert("パスワードを入力してください。")
     return
   }
-  // 入室情報を送信(既存のチャットを要求)
-  socket.emit("loginEvent")
   // 全体で使用するnameに入力されたユーザー名を格納
+
+  //TODO DBから社員番号とパスワードで照合かつ表示名データを取得し、usernameを設定
   if (userName) userName.value = inputEmployeeNumber.value
   // チャット画面へ遷移
   router.push({ name: "chat" })

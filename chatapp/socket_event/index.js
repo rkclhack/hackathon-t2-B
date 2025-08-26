@@ -1,12 +1,25 @@
 export default async (io, socket, db) => {
   // 入室メッセージをクライアントに送信する
-  socket.on("loginEvent", async () => {
+  socket.on("loginEvent", async (data) => {
     // 過去のメッセージを入室したクライアントにのみ送信
+    const { employeeNumber, password } = data
     try {
       const messages = await db.all("SELECT * FROM messages ORDER BY date ASC")
+      const user = await db.get(
+      "SELECT * FROM users WHERE employee_number = ? AND password = ?",
+      [employeeNumber, password]
+    )
+
+    if (!user) {
+      socket.emit("loginFailed", "社員番号またはパスワードが違います")
+      return
+    }
+
+      socket.emit("loginSuccess", { userName: user.display_name })
       socket.emit("loadMessages", messages)
     } catch (e) {
       console.error("データベースからロードできませんでした", e)
+      socket.emit("loginFailed", "ログインできませんでした")
     }
   })
 

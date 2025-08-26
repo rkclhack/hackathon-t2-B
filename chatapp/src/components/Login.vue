@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import socketManager from "../socketManager.js"
 import "./login.css"
 
+const socket = socketManager.getInstance()
 // #region global state
 const userName = inject("userName")
 const employeeNumber = inject("employeeNumber")
@@ -34,9 +35,22 @@ const onEnter = () => {
   // 全体で使用するnameに入力されたユーザー名を格納
 
   //TODO DBから社員番号とパスワードで照合かつ表示名データを取得し、usernameを設定
-  if (userName) userName.value = inputEmployeeNumber.value
-  // チャット画面へ遷移
+  socket.emit("loginEvent", {
+    employeeNumber: inputEmployeeNumber.value,
+    password: inputPassword.value
+  })
+
+  socket.on("loginSuccess", (data) => {
+  // 受け取ったユーザー名をグローバル状態にセット
+  if (userName) userName.value = data.userName
+
+  // チャット画面に遷移
   router.push({ name: "chat" })
+  })
+
+  socket.on("loginFailed", (msg) => {
+    alert(msg)
+  })
 }
 // #endregion
 </script>

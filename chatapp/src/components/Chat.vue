@@ -52,7 +52,7 @@ const onPublish = () => {
     id: self.crypto.randomUUID(),
     sender: userName.value,
     date: Date.now(),
-    message: chatContent.value,
+    message: chatContent.value.trim(),
     genre: selectedGenre.value,
     importance: importance.value,
   }

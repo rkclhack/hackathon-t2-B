@@ -40,8 +40,6 @@ const saveChanges = () => {
     genre: localGenre.value,
     importance: localImportance.value,
   }
-  console.log(props.chat.importance)
-  console.log(localGenre.value)
   socket.emit("updateMessageEvent", updateData)
 }
 

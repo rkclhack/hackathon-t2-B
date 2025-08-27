@@ -170,7 +170,7 @@ const registerSocketEvent = () => {
       </div>
       <div class="mt-5" v-if="filterChatList.length !== 0">
         <ul>
-          <li class="item mt-4" v-for="(chat, i) in filterChatList" :key="i">
+          <li class="item mt-4" v-for="(chat) in filterChatList" :key="chat.id">
             <ChatCard :chat="chat" />
           </li>
         </ul>

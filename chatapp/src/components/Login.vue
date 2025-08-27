@@ -14,7 +14,6 @@ const router = useRouter()
 // #endregion
 
 // #region reactive variable
-const inputUserName = ref("")
 const inputEmployeeNumber = ref("")
 const inputPassword = ref("")
 // #endregion
@@ -31,9 +30,7 @@ const onEnter = () => {
     alert("パスワードを入力してください。")
     return
   }
-  // 全体で使用するnameに入力されたユーザー名を格納
 
-  //TODO DBから社員番号とパスワードで照合かつ表示名データを取得し、usernameを設定
   socket.emit("loginEvent", {
     employeeNumber: inputEmployeeNumber.value,
     password: inputPassword.value

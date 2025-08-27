@@ -24,9 +24,9 @@ onMounted(() => {
 // #region browser event handler
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
-  const messageText = `${userName.value}さん：${chatContent.value}`
+  if(!chatContent.value.trim()) return
 
-  if (inputUserName.trim() === "") return
+  const messageText = `${userName.value}さん：${chatContent.value}`
 
   socket.emit("publishEvent", messageText)
   // 入力欄を初期化

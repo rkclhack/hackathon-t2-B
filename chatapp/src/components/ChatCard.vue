@@ -28,12 +28,14 @@ const importanceClass = computed(() => {
 })
 
 // 日付を見やすい形式に変換
-const formattedDate = new Date(props.chat.date).toLocaleString("ja-JP", {
-  month: "numeric",
-  day: "numeric",
-  hour: "2-digit",
-  minute: "2-digit"
-});
+const formattedDate = computed(() => {
+  return new Date(props.chat.date).toLocaleString("ja-JP", {
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  })
+})
 </script>
 
 <template>

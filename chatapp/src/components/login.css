@@ -1,0 +1,63 @@
+/* コンテナ */
+.login-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* タイトル */
+.login-title {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* フォーム */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ラベル */
+.login-label {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+/* 入力欄 */
+.login-input {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #888;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ボタン */
+.login-button {
+  padding: 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #3490dc;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+/* スマホ対応 */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 16px;
+  }
+  .login-title {
+    font-size: 1.25rem;
+  }
+  .login-input,
+  .login-button {
+    font-size: 1rem;
+  }
+}

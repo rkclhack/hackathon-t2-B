@@ -1,5 +1,9 @@
 <script setup>
-import { computed } from "vue"
+import socketManager from "../socketManager.js" 
+import { computed, ref, watch } from "vue" 
+
+const socket = socketManager.getInstance() 
+
 const props = defineProps({
   chat: {
     id: String,
@@ -11,9 +15,43 @@ const props = defineProps({
   }
 })
 
+// ローカル状態として管理(編集用)
+const localGenre = ref(props.chat.genre)
+const localImportance = ref(props.chat.importance)
+
+// 他のユーザーからの更新を受信したときにローカル状態を更新
+watch(() => props.chat.genre, (newGenre) => {
+  localGenre.value = newGenre
+})
+
+watch(() => props.chat.importance, (newImportance) => {
+  localImportance.value = newImportance
+})
+
+// ジャンルや重要度に変更がされているのかを判定
+const hasChanges = computed(() => {
+  return localGenre.value !== props.chat.genre || localImportance.value !== props.chat.importance
+})
+
+// ジャンルや重要度の変更を保存する
+const saveChanges = () => {
+  const updateData = {
+    id: props.chat.id,
+    genre: localGenre.value,
+    importance: localImportance.value,
+  }
+  socket.emit("updateMessageEvent", updateData)
+}
+
+// ジャンルや重要度の変更のキャンセル
+const cancelChanges = () => {
+  localGenre.value = props.chat.genre
+  localImportance.value = props.chat.importance
+}
+
 // フォームのボタンに適切な重要度のクラスを付与する
 const importanceClass = computed(() => {
-  switch (props.chat.importance) {
+  switch (localImportance.value) { 
     case 3:
       return "highImportant"
     case 2:
@@ -44,9 +82,32 @@ const formattedDate = computed(() => {
     <p class="message">{{ chat.message }}</p>
     <details>
       <summary>{{ formattedDate }}</summary>
-      <p>ジャンル: {{ chat.genre }}</p>
-      <p>重要度: {{ chat.importance }}</p>
-      <p>ID: {{ chat.id }}</p>
+
+      <div>
+        <label>表示ジャンル：</label>
+        <select v-model="localGenre" class="select-box">
+          <option :value="0">全体</option>
+          <option :value="1">あいさつ</option>
+          <option :value="2">シフト</option>
+          <option :value="3">業務連絡</option>
+          <option :value="4">雑談</option>
+        </select>
+      </div>
+
+      <div>
+        <label>重要度：</label>
+        <select v-model="localImportance" class="select-box">
+          <option :value="0">完了</option>
+          <option :value="1">低</option>
+          <option :value="2">中</option>
+          <option :value="3">高</option>
+        </select>
+      </div>
+
+      <div class="button-group" v-if="hasChanges">
+        <button @click="saveChanges" class="save-button">変更を保存</button>
+        <button @click="cancelChanges" class="cancel-button">キャンセル</button>
+      </div>
     </details>
   </div>
 </template>
@@ -71,5 +132,41 @@ const formattedDate = computed(() => {
 .message-wrap summary {
   color: #6d6d6d;
   font-size: 12px;
+}
+.select-box {
+  padding: 8px;
+  margin-left: 8px;
+  border: 1px solid #888;
+  border-radius: 4px;
+  background-color: white;
+}
+.button-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.save-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.save-button:hover {
+  background-color: #45a049;
+}
+.cancel-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.cancel-button:hover {
+  background-color: #da190b;
 }
 </style>

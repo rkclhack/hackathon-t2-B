@@ -117,6 +117,15 @@ const onLoadMessages = (messages) => {
     chatList.unshift(data)
   })
 }
+
+// メッセージ更新イベントの受信
+const onMessageUpdated = (updateData) => {
+  const messageIndex = chatList.findIndex(chat => chat.id === updateData.id)
+  if (messageIndex !== -1) {
+    chatList[messageIndex].genre = updateData.genre
+    chatList[messageIndex].importance = updateData.importance
+  }
+}
 // #endregion
 
 // #region local methods
@@ -130,6 +139,11 @@ const registerSocketEvent = () => {
   // 投稿イベントを受け取ったら実行
   socket.on("publishEvent", (data) => {
     onReceivePublish(data)
+  })
+
+  // メッセージ更新イベントを受け取ったら実行
+  socket.on("messageUpdatedEvent", (data) => {
+    onMessageUpdated(data)
   })
 }
 // #endregion
@@ -156,7 +170,7 @@ const registerSocketEvent = () => {
       </div>
       <div class="mt-5" v-if="filterChatList.length !== 0">
         <ul>
-          <li class="item mt-4" v-for="(chat, i) in filterChatList" :key="i">
+          <li class="item mt-4" v-for="(chat) in filterChatList" :key="chat.id">
             <ChatCard :chat="chat" />
           </li>
         </ul>

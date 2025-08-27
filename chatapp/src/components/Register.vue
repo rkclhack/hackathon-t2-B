@@ -48,7 +48,7 @@ onMounted(() => {
 
 <template>
   <div class="login-container">
-    <h1 class="login-title">新規登録</h1>
+    <h1 class="login-title">スマート報連相 新規登録</h1>
 
     <div class="login-form">
       <label class="login-label">表示名</label>

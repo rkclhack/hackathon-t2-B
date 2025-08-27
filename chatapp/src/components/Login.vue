@@ -1,5 +1,5 @@
 <script setup>
-import { inject, onMounted, ref } from "vue"
+import { inject, onMounted, onUnmounted ,ref } from "vue"
 import { useRouter } from "vue-router"
 import socketManager from "../socketManager.js"
 import "./login.css"
@@ -40,19 +40,24 @@ const onEnter = () => {
     password: inputPassword.value
   })
 }
-  onMounted(() => {
-    socket.once("loginSuccess", (data) => {
-    // 受け取ったユーザー名をグローバル状態にセット
-    if (userName) userName.value = data.userName
-
-    // チャット画面に遷移
-    router.push({ name: "chat" })
+  onMounted(() => { 
+    socket.on("loginSuccess", onLoginSuccess)
+    socket.on("loginFailed", onLoginFailed)
   })
 
-    socket.once("loginFailed", (msg) => {
-      alert(msg)
-    })
-  })
+  const onLoginSuccess = (data) => {
+   if (userName) userName.value = data.userName
+   router.push({ name: "chat" })
+ }
+
+ const onLoginFailed = (msg) => {
+   alert(msg)
+ }
+
+ onUnmounted(() => {
+   socket.off("loginSuccess", onLoginSuccess)
+   socket.off("loginFailed", onLoginFailed)
+ })
 // #endregion
 </script>
 

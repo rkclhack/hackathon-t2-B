@@ -7,7 +7,6 @@ import "./login.css"
 const socket = socketManager.getInstance()
 // #region global state
 const userName = inject("userName")
-const employeeNumber = inject("employeeNumber")
 // #endregion
 
 // #region local variable

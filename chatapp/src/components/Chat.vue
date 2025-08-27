@@ -1,10 +1,12 @@
 <script setup>
-import { inject, ref, reactive, onMounted, computed } from "vue"
+import { provide, inject, ref, reactive, onMounted, computed } from "vue"
 import socketManager from '../socketManager.js'
+import Header from "./Header.vue"
 import ChatCard from "./ChatCard.vue"
 
 // #region global state
 const userName = inject("userName")
+const employeeNumber = inject("employeeNumber")
 // #endregion
 
 // #region local variable
@@ -15,6 +17,7 @@ const socket = socketManager.getInstance()
 const chatContent = ref("")
 const chatList = reactive([])
 const selectedGenre = ref(0) // 選択したジャンルを変数にて保存 0:全て表示
+provide("selectedGenre", selectedGenre)
 const importance = ref(1) // 重要度(0:完了, 1:低, 2:中, 3:高)
 // #endregion
 
@@ -152,37 +155,20 @@ const registerSocketEvent = () => {
 </script>
 
 <template>
-  <div class="mx-auto my-16 px-4">
-    <h1 class="text-h3 font-weight-medium">Vue.js Chat チャットルーム</h1>
-    <div class="mt-10">
-      <p class="userName">ログインユーザ：{{ userName }}さん</p>
-      <router-link to="/" class="link">
-        <button type="button" class="button-normal button-exit">退室する</button>
-      </router-link>
-
-      <div class="mt-5">
-        <label for="genre-select">表示ジャンル：</label>
-        <select id="genre-select" v-model="selectedGenre" class="genre-select">
-          <option :value="0">全体</option>
-          <option :value="1">あいさつ</option>
-          <option :value="2">シフト</option>
-          <option :value="3">業務連絡</option>
-          <option :value="4">雑談</option>
-        </select>
-      </div>
-      <div class="mt-5" v-if="filterChatList.length !== 0">
-        <ul>
-          <li class="item mt-4" v-for="(chat) in filterChatList" :key="chat.id">
-            <ChatCard :chat="chat" />
-          </li>
-        </ul>
-      </div>
+  <Header :employeeNumber="employeeNumber" :userName="userName" />
+  <div class="mx-auto px-4">
+    <div v-if="filterChatList.length !== 0">
+      <ul>
+        <li class="item mt-4" v-for="(chat) in filterChatList" :key="chat.id">
+          <ChatCard :chat="chat" />
+        </li>
+      </ul>
     </div>
-    <div class="message-form">
-      <button class="button-normal" :class="importanceClass" @click="toggleImportance">{{ importanceText }}</button>
-      <textarea variant="outlined" placeholder="投稿文を入力してください" rows="4" v-model="chatContent"></textarea>
-      <button class="button-normal" @click="onPublish">投稿</button>
-    </div>
+  </div>
+  <div class="message-form">
+    <button class="button-normal" :class="importanceClass" @click="toggleImportance">{{ importanceText }}</button>
+    <textarea variant="outlined" placeholder="投稿文を入力してください" rows="4" v-model="chatContent"></textarea>
+    <button class="button-normal" @click="onPublish">投稿</button>
   </div>
 </template>
 
@@ -234,6 +220,7 @@ const registerSocketEvent = () => {
   display: flex;
   gap: 8px;
   padding: 8px;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.2);
 }
 
 .message-form textarea {

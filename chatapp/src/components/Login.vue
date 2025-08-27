@@ -7,6 +7,7 @@ import "./login.css"
 const socket = socketManager.getInstance()
 // #region global state
 const userName = inject("userName")
+const employeeNumber = inject("employeeNumber")
 // #endregion
 
 // #region local variable
@@ -43,6 +44,7 @@ const onEnter = () => {
 
   const onLoginSuccess = (data) => {
    if (userName) userName.value = data.userName
+   if (employeeNumber) employeeNumber.value = inputEmployeeNumber.value
    router.push({ name: "chat" })
  }
 
@@ -59,7 +61,7 @@ const onEnter = () => {
 
 <template>
   <div class="login-container">
-    <h1 class="login-title">Vue.js Chat サンプル</h1>
+    <h1 class="login-title">スマート報連相 ログイン</h1>
 
     <div class="login-form">
       <label class="login-label">社員番号</label>

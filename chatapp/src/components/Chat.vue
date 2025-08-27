@@ -45,12 +45,14 @@ onMounted(() => {
 // #region browser event handler
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
+  if(!chatContent.value.trim()) return
+
   /** @type {chatData} */
   const data = {
     id: self.crypto.randomUUID(),
     sender: userName.value,
     date: Date.now(),
-    message: chatContent.value,
+    message: chatContent.value.trim(),
     genre: selectedGenre.value,
     importance: importance.value,
   }

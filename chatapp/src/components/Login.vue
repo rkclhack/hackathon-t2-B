@@ -41,7 +41,7 @@ const onEnter = () => {
   })
 }
   onMounted(() => {
-    socket.on("loginSuccess", (data) => {
+    socket.once("loginSuccess", (data) => {
     // 受け取ったユーザー名をグローバル状態にセット
     if (userName) userName.value = data.userName
 
@@ -49,7 +49,7 @@ const onEnter = () => {
     router.push({ name: "chat" })
   })
 
-    socket.on("loginFailed", (msg) => {
+    socket.once("loginFailed", (msg) => {
       alert(msg)
     })
   })

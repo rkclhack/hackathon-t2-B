@@ -7,8 +7,6 @@ import ChatCard from "./ChatCard.vue"
 // #region global state
 const userName = inject("userName")
 const employeeNumber = inject("employeeNumber")
-provide("userName", userName)
-provide("employeeNumber", employeeNumber)
 // #endregion
 
 // #region local variable
@@ -155,7 +153,7 @@ const registerSocketEvent = () => {
 </script>
 
 <template>
-  <Header />
+  <Header :employeeNumber="employeeNumber" :userName="userName" />
   <div class="mx-auto px-4">
     <div v-if="filterChatList.length !== 0">
       <ul>

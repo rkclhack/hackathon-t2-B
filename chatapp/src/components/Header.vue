@@ -2,9 +2,13 @@
 import { inject } from "vue" 
 
 // #region global state
-const userName = inject("userName")
-const employeeNumber = inject("employeeNumber")
+// const userName = inject("userName")
+// const employeeNumber = inject("employeeNumber")
 const selectedGenre = inject("selectedGenre")
+const props = defineProps({
+  userName: String,
+  employeeNumber: String
+})
 // #endregion
 </script>
 
@@ -24,9 +28,9 @@ const selectedGenre = inject("selectedGenre")
     </div>
     <div class="header-user">
       <details>
-        <summary>{{ userName.value ? userName.value + "さん" : "未ログイン" }}さん</summary>
+        <summary>{{ props.userName }}さん</summary>
         <div class="header-menu">
-          <p>社員番号: {{ employeeNumber.value }}</p>
+          <p>社員番号: {{ props.employeeNumber }}</p>
           <router-link to="/" class="link">
             <button type="button" class="button-normal button-exit">退室する</button>
           </router-link>
